@@ -15,6 +15,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(SERVER_SOURCES
     src/main.cpp
     src/kvstore.cpp
+    src/server.cpp
 )
 
 # Source files for the test program
@@ -29,5 +30,6 @@ add_executable(server ${SERVER_SOURCES})
 # Create the test executable
 add_executable(test_kvstore ${TEST_SOURCES})
 
-# Link against pthread (we'll need this for networking later)
+# Link against pthread
 target_link_libraries(server pthread)
+target_link_libraries(test_kvstore pthread)

@@ -10,7 +10,6 @@ build/
 *.so
 *.a
 *.out
-server
 
 # OS
 .DS_Store

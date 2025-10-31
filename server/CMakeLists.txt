@@ -11,13 +11,25 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add compiler warnings (helps catch bugs!)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
-# Source files - we'll add more as we build
-set(SOURCES
+# Source files for the server
+set(SERVER_SOURCES
     src/main.cpp
+    src/kvstore.cpp
+    src/server.cpp
 )
 
-# Create the executable
-add_executable(server ${SOURCES})
+# Source files for the test program
+set(TEST_SOURCES
+    src/test_kvstore.cpp
+    src/kvstore.cpp
+)
 
-# Link against pthread (we'll need this for networking later)
+# Create the server executable
+add_executable(server ${SERVER_SOURCES})
+
+# Create the test executable
+add_executable(test_kvstore ${TEST_SOURCES})
+
+# Link against pthread
 target_link_libraries(server pthread)
+target_link_libraries(test_kvstore pthread)

@@ -6,7 +6,7 @@ A learning project to understand C++, Python, networking, and the fundamentals o
 
 A simple key-value store with:
 - **C++ server** that stores data in memory ✓
-- **Python client** to interact with the server (coming soon)
+- **Python client** to interact with the server ✓
 - **Text-based protocol** for communication ✓
 
 Think of it like a dictionary/hash map accessible over the network!
@@ -18,16 +18,21 @@ Think of it like a dictionary/hash map accessible over the network!
 - [x] C++ TCP server with network communication
 - [x] Protocol parser and command handling
 - [x] Full integration and testing
-- [ ] Python client implementation
-- [ ] Usage examples
-- [ ] Documentation improvements
+- [x] Python client implementation
+- [x] Comprehensive test suite (pytest)
+- [x] Usage examples
+- [ ] CI/CD pipeline (GitHub Actions)
+- [ ] Automated server management in tests
+- [ ] README improvements (in progress)
 
 ## Quick Start
 
 ### Prerequisites
+
 - C++ compiler with C++17 support (g++ 7+ or clang++ 5+)
 - CMake 3.10 or higher
-- Python 3.7+ (for client, coming soon)
+- Python 3.7+
+- pytest (for running Python tests)
 
 ### Building the Server
 
@@ -46,7 +51,7 @@ make
 
 The server will start listening on port 8080.
 
-### Testing the Server
+### Testing the Server (Manual)
 
 From another terminal, connect using netcat:
 
@@ -69,7 +74,7 @@ GET username
 ERROR KEY_NOT_FOUND
 ```
 
-### Running Tests
+### Running C++ Tests
 
 ```bash
 cd server/build
@@ -77,6 +82,52 @@ cd server/build
 ```
 
 All tests should pass ✓
+
+### Using the Python Client
+
+**Install dependencies:**
+```bash
+pip3 install pytest
+```
+
+**Basic Usage:**
+```python
+from kvstore_client import KVStoreClient
+
+# Using context manager (recommended)
+with KVStoreClient('localhost', 8080) as client:
+    client.set('username', 'Alice')
+    value = client.get('username')
+    print(value)  # 'Alice'
+    
+    # Check if key exists
+    if client.exists('username'):
+        print("Key exists!")
+    
+    # Delete a key
+    client.delete('username')
+```
+
+**Run Example Script:**
+```bash
+# Make sure server is running first!
+cd client
+python3 example.py
+```
+
+**Run Python Tests:**
+```bash
+cd client
+
+# Run all tests (requires server running for integration tests)
+pytest test_kvstore_client.py -v
+
+# Run only unit tests (no server needed)
+pytest test_kvstore_client.py -m "not integration" -v
+
+# Run only integration tests (server must be running)
+pytest test_kvstore_client.py -m integration -v
+```
 
 ## Protocol
 
@@ -103,23 +154,42 @@ See [docs/protocol.md](docs/protocol.md) for full details.
 ```
 cpp-py-kvstore/
 ├── docs/
-│   └── protocol.md      # Protocol specification
-├── server/              # C++ server
-│   ├── CMakeLists.txt   # Build configuration
+│   └── protocol.md           # Protocol specification
+├── server/                   # C++ server
+│   ├── CMakeLists.txt        # Build configuration
 │   ├── src/
-│   │   ├── main.cpp     # Entry point
-│   │   ├── server.h/cpp # Network server
-│   │   ├── kvstore.h/cpp # Storage implementation
-│   │   └── test_kvstore.cpp # Tests
-│   └── build/           # Build output (gitignored)
-└── client/              # Python client (coming soon)
+│   │   ├── main.cpp          # Entry point
+│   │   ├── server.h/cpp      # Network server
+│   │   ├── kvstore.h/cpp     # Storage implementation
+│   │   └── test_kvstore.cpp  # C++ tests
+│   └── build/                # Build output (gitignored)
+└── client/                   # Python client
+    ├── kvstore_client.py     # Client library
+    ├── example.py            # Usage examples
+    ├── test_kvstore_client.py # Test suite
+    └── pytest.ini            # Test configuration
 ```
+
+## Testing
+
+### C++ Tests
+- Unit tests for `KVStore` class
+- All core operations tested (set, get, delete, exists)
+- Run with `./test_kvstore` from `server/build/`
+
+### Python Tests
+- **9 unit tests**: Input validation and response parsing (mocked, no server needed)
+- **5 integration tests**: End-to-end testing with real C++ server
+- Custom pytest markers for selective test execution
+- Run with `pytest test_kvstore_client.py -v` from `client/`
 
 ## What I'm Learning
 
 - **C++ programming**: Classes, STL containers (`std::unordered_map`), `std::optional`
+- **Python programming**: Context managers, logging, proper library design
 - **Socket programming**: TCP sockets, client-server architecture
 - **Protocol design**: Text-based communication protocols
+- **Testing**: Unit tests, integration tests, mocking, pytest
 - **Memory management**: RAII patterns, references vs pointers
 - **Build systems**: CMake configuration
 - **Git workflows**: Feature branches, pull requests, documentation
@@ -127,10 +197,11 @@ cpp-py-kvstore/
 ## Network Access
 
 The server listens on all interfaces (`0.0.0.0:8080`), so you can connect from:
-- Same machine: `nc localhost 8080`
-- Other machines on LAN: `nc <server-ip> 8080`
+- Same machine: `nc localhost 8080` or use Python client
+- Other machines on LAN: Connect using server's IP address
 
 **Note:** You may need to allow port 8080 through your firewall:
+
 ```bash
 # Red Hat/Fedora/CentOS
 sudo firewall-cmd --add-port=8080/tcp --permanent
@@ -145,8 +216,19 @@ Current known limitations:
 - No persistence (data lost when server stops)
 - No authentication or encryption
 - No maximum storage limits
+- Integration tests require manual server startup
 
 These are acceptable for a learning project and may be addressed in future iterations.
+
+## Future Enhancements
+
+Potential improvements for continued learning:
+- GitHub Actions CI/CD pipeline
+- Automated server lifecycle in tests
+- Multi-threaded server (handle concurrent clients)
+- Data persistence (save to disk)
+- Additional data structures (lists, sets)
+- Performance benchmarking
 
 ---
 

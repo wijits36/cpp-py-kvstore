@@ -8,19 +8,36 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Install dependencies
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake g++ python3 python3-pip lcov
-        pip3 install pytest pytest-cov
+        pip3 install pytest pytest-cov --break-system-packages
     
-    - name: Build C++ server
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install lcov
+        pip3 install pytest pytest-cov --break-system-packages
+    
+    - name: Install dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        pip install pytest pytest-cov
+    
+    - name: Build C++ server with coverage (Unix)
+      if: runner.os != 'Windows'
       run: |
         cd server
         mkdir -p build
@@ -28,40 +45,45 @@ jobs:
         cmake -DCOVERAGE=ON ..
         make
     
-    - name: Run C++ tests
+    - name: Run C++ tests (Unix)
+      if: runner.os != 'Windows'
       run: |
         cd server/build
         ./test_kvstore
     
-    - name: Generate C++ coverage report
+    - name: Generate C++ coverage report (Ubuntu only)
+      if: matrix.os == 'ubuntu-latest'
       run: |
         cd server/build
         lcov --capture --directory . --output-file coverage.info
         lcov --remove coverage.info '/usr/*' '*/test_kvstore.cpp' --output-file coverage_filtered.info
         lcov --list coverage_filtered.info
-
+    
     - name: Run Python unit tests with coverage
       run: |
         cd client
         pytest test_kvstore_client.py -m "not integration" --cov=kvstore_client --cov-report=term --cov-report=xml -v
     
-    - name: Start C++ server
+    - name: Start C++ server (Unix only)
+      if: runner.os != 'Windows'
       run: |
         cd server/build
         ./server &
         sleep 2
     
-    - name: Run Python integration tests
+    - name: Run Python integration tests (Unix only)
+      if: runner.os != 'Windows'
       run: |
         cd client
         pytest test_kvstore_client.py -m integration -v
     
-    - name: Stop C++ server
-      if: always()
+    - name: Stop C++ server (Unix only)
+      if: always() && runner.os != 'Windows'
       run: |
         pkill -f "./server" || true
-
-    - name: Upload coverage to Codecov
+    
+    - name: Upload coverage to Codecov (Ubuntu only)
+      if: matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v4
       with:
         files: ./client/coverage.xml,./server/build/coverage_filtered.info

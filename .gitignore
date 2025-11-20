@@ -18,3 +18,15 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Coverage reports
+client/coverage.xml
+client/.coverage
+client/htmlcov/
+
+# C++ Coverage
+server/build/*.info
+server/build/*.gcda
+server/build/*.gcno
+server/build/CMakeFiles/**/*.gcda
+server/build/CMakeFiles/**/*.gcno

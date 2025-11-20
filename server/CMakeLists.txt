@@ -11,6 +11,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add compiler warnings (helps catch bugs!)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
+# Coverage support (optional, enable with -DCOVERAGE=ON)
+option(COVERAGE "Enable coverage reporting" OFF)
+if(COVERAGE)
+    message(STATUS "Building with coverage support")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+endif()
+
 # Source files for the server
 set(SERVER_SOURCES
     src/main.cpp

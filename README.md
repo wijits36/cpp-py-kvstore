@@ -1,5 +1,7 @@
 # A Basic C++ / Python Key-Value Store
 
+![CI Tests](https://github.com/wijits36/cpp-py-kvstore/actions/workflows/test.yml/badge.svg)
+
 A learning project to understand C++, Python, networking, and the fundamentals of key-value databases.
 
 ## What is This?
@@ -21,9 +23,9 @@ Think of it like a dictionary/hash map accessible over the network!
 - [x] Python client implementation
 - [x] Comprehensive test suite (pytest)
 - [x] Usage examples
-- [ ] CI/CD pipeline (GitHub Actions)
+- [x] CI/CD pipeline (GitHub Actions)
 - [ ] Automated server management in tests
-- [ ] README improvements (in progress)
+- [ ] Code coverage reporting
 
 ## Quick Start
 
@@ -183,6 +185,17 @@ cpp-py-kvstore/
 - Custom pytest markers for selective test execution
 - Run with `pytest test_kvstore_client.py -v` from `client/`
 
+### CI/CD Pipeline
+- **Automated testing** via GitHub Actions on every push and pull request
+- **Workflow steps**:
+  1. Build C++ server
+  2. Run C++ tests
+  3. Run Python unit tests (no server required)
+  4. Start server and run Python integration tests
+  5. Automatic cleanup
+- **Status badge** at top of README shows current build status
+- View all test runs: [Actions tab](https://github.com/wijits36/cpp-py-kvstore/actions)
+
 ## What I'm Learning
 
 - **C++ programming**: Classes, STL containers (`std::unordered_map`), `std::optional`
@@ -190,6 +203,7 @@ cpp-py-kvstore/
 - **Socket programming**: TCP sockets, client-server architecture
 - **Protocol design**: Text-based communication protocols
 - **Testing**: Unit tests, integration tests, mocking, pytest
+- **CI/CD**: GitHub Actions, automated testing pipelines
 - **Memory management**: RAII patterns, references vs pointers
 - **Build systems**: CMake configuration
 - **Git workflows**: Feature branches, pull requests, documentation
@@ -216,15 +230,17 @@ Current known limitations:
 - No persistence (data lost when server stops)
 - No authentication or encryption
 - No maximum storage limits
-- Integration tests require manual server startup
+- Integration tests require manual server startup locally (automated in CI)
 
 These are acceptable for a learning project and may be addressed in future iterations.
 
 ## Future Enhancements
 
 Potential improvements for continued learning:
-- GitHub Actions CI/CD pipeline
-- Automated server lifecycle in tests
+- Matrix testing (test on multiple OS: Ubuntu, macOS, Windows)
+- Self-hosted RHEL runner for CI
+- Code coverage reporting with badges
+- Automated server lifecycle in local tests
 - Multi-threaded server (handle concurrent clients)
 - Data persistence (save to disk)
 - Additional data structures (lists, sets)

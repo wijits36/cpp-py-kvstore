@@ -60,3 +60,11 @@ jobs:
       if: always()
       run: |
         pkill -f "./server" || true
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./client/coverage.xml,./server/build/coverage_filtered.info
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false

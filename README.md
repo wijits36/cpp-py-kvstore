@@ -1,6 +1,7 @@
 # A Basic C++ / Python Key-Value Store
 
 ![CI Tests](https://github.com/wijits36/cpp-py-kvstore/actions/workflows/test.yml/badge.svg)
+[![codecov](https://codecov.io/gh/wijits36/cpp-py-kvstore/graph/badge.svg?token=IH5SEQVYWC)](https://codecov.io/gh/wijits36/cpp-py-kvstore)
 
 A learning project to understand C++, Python, networking, and the fundamentals of key-value databases.
 
@@ -24,8 +25,8 @@ Think of it like a dictionary/hash map accessible over the network!
 - [x] Comprehensive test suite (pytest)
 - [x] Usage examples
 - [x] CI/CD pipeline (GitHub Actions)
+- [x] Code coverage reporting (Codecov)
 - [ ] Automated server management in tests
-- [ ] Code coverage reporting
 
 ## Quick Start
 

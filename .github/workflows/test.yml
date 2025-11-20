@@ -34,7 +34,7 @@ jobs:
     - name: Install dependencies (Windows)
       if: runner.os == 'Windows'
       run: |
-        pip install pytest
+        pip install pytest pytest-cov
     
     - name: Build C++ server with coverage (Unix)
       if: runner.os != 'Windows'

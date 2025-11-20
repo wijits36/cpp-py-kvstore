@@ -26,6 +26,7 @@ Think of it like a dictionary/hash map accessible over the network!
 - [x] Usage examples
 - [x] CI/CD pipeline (GitHub Actions)
 - [x] Code coverage reporting (Codecov)
+- [x] Multi-platform matrix testing (Ubuntu, macOS, Windows)
 - [ ] Automated server management in tests
 
 ## Quick Start
@@ -188,12 +189,17 @@ cpp-py-kvstore/
 
 ### CI/CD Pipeline
 - **Automated testing** via GitHub Actions on every push and pull request
+- **Multi-platform matrix testing**: Ubuntu, macOS, Windows
+- **Platform coverage**:
+  - Ubuntu & macOS: Full testing (C++ + Python)
+  - Windows: Python client testing only (C++ server uses Unix APIs)
 - **Workflow steps**:
-  1. Build C++ server
+  1. Build C++ server (Unix platforms)
   2. Run C++ tests
-  3. Run Python unit tests (no server required)
-  4. Start server and run Python integration tests
-  5. Automatic cleanup
+  3. Run Python unit tests with coverage
+  4. Start server and run Python integration tests (Unix)
+  5. Upload coverage to Codecov
+  6. Automatic cleanup
 - **Status badge** at top of README shows current build status
 - View all test runs: [Actions tab](https://github.com/wijits36/cpp-py-kvstore/actions)
 
